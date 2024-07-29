@@ -1,12 +1,10 @@
-import { initializeApp } from "firebase/app"
-
+import { initializeApp } from "firebase/app";
 import {
     getAuth,
-    signInWithRedirect,
     signInWithPopup,
+    signInWithRedirect,
     GoogleAuthProvider
 } from "firebase/auth"
-
 import {
     getFirestore,
     doc,
@@ -24,20 +22,18 @@ const firebaseConfig = {
     appId: "1:1055033040608:web:cf2cd43c17010fc1c23a85"
 };
 
+const fireBaseApp = initializeApp(firebaseConfig);
 
-const firebaseApp = initializeApp(firebaseConfig);
+const provider = new GoogleAuthProvider()
 
-const googleProvider = new GoogleAuthProvider();
+provider.setCustomParameters({
+    prompt: "select_account"
+})
 
-googleProvider.setCustomParameters({
-    prompt: 'select_account',
-});
+export const auth = getAuth()
+export const signInWithGooglePopup = () => signInWithPopup(auth, provider)
 
-export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
-export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
-
-export const db = getFirestore();
+export const db = getFirestore()
 
 export const createUserDocumentFromAuth = async (userAuth) => {
     const userDocRef = doc(db, 'users', userAuth.uid);
